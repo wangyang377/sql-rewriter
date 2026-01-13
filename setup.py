@@ -1,8 +1,8 @@
 """
-构建脚本 - 在构建时自动生成 ANTLR 代码
+Build script - Automatically generate ANTLR code during build
 
-这个文件用于在构建分发包时自动生成 ANTLR 解析器代码。
-生成的代码会被包含在分发包中，用户安装后即可使用。
+This file is used to automatically generate ANTLR parser code when building distribution packages.
+The generated code will be included in the distribution package, ready for users after installation.
 """
 
 from setuptools import setup
@@ -13,27 +13,27 @@ import sys
 
 
 class BuildPyCommand(build_py):
-    """自定义 build_py 命令，在构建前生成 ANTLR 代码"""
+    """Custom build_py command that generates ANTLR code before building"""
     
     def run(self):
-        """运行构建前，先生成 ANTLR 代码"""
-        print("正在生成 ANTLR 解析器代码...")
+        """Generate ANTLR code before running build"""
+        print("Generating ANTLR parser code...")
         
-        # 获取项目根目录
+        # Get project root directory
         project_root = Path(__file__).parent
         grammar_dir = project_root / "grammar"
         output_dir = project_root / "src" / "sql_rewriter" / "_generated"
         script_path = project_root / "scripts" / "generate_parser.sh"
         
-        # 确保输出目录存在
+        # Ensure output directory exists
         output_dir.mkdir(parents=True, exist_ok=True)
         
-        # 检查语法文件是否存在
+        # Check if grammar files exist
         if not (grammar_dir / "HiveLexer.g4").exists():
-            print("警告: 未找到 HiveLexer.g4，跳过代码生成")
-            print("      如果从 Git 克隆，请先运行: ./scripts/generate_parser.sh")
+            print("Warning: HiveLexer.g4 not found, skipping code generation")
+            print("      If cloning from Git, please run: ./scripts/generate_parser.sh")
         else:
-            # 运行生成脚本
+            # Run generation script
             try:
                 result = subprocess.run(
                     [str(script_path)],
@@ -43,28 +43,28 @@ class BuildPyCommand(build_py):
                     text=True
                 )
                 print(result.stdout)
-                print("✓ ANTLR 代码生成成功")
+                print("✓ ANTLR code generated successfully")
             except subprocess.CalledProcessError as e:
-                print(f"错误: ANTLR 代码生成失败")
+                print(f"Error: ANTLR code generation failed")
                 print(e.stderr)
-                print("\n提示: 如果从 Git 克隆，请先运行:")
+                print("\nHint: If cloning from Git, please run:")
                 print("  ./scripts/generate_parser.sh")
-                print("\n或者安装 ANTLR4 工具:")
+                print("\nOr install ANTLR4 tool:")
                 print("  macOS: brew install antlr")
                 print("  Linux: sudo apt-get install antlr4")
-                # 不抛出异常，允许继续构建（如果代码已存在）
+                # Don't raise exception, allow build to continue (if code already exists)
                 if not (output_dir / "HiveParser.py").exists():
                     raise
             except FileNotFoundError:
-                print("警告: 未找到生成脚本，跳过代码生成")
-                print("      如果从 Git 克隆，请先运行: ./scripts/generate_parser.sh")
+                print("Warning: Generation script not found, skipping code generation")
+                print("      If cloning from Git, please run: ./scripts/generate_parser.sh")
         
-        # 调用父类的 run 方法继续构建
+        # Call parent's run method to continue build
         super().run()
 
 
-# 读取 pyproject.toml 中的配置
-# 这里我们只定义构建命令，其他配置在 pyproject.toml 中
+# Read configuration from pyproject.toml
+# Here we only define build commands, other configuration is in pyproject.toml
 setup(
     cmdclass={
         'build_py': BuildPyCommand,

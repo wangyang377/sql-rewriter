@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
-简单的测试脚本
+Simple test script
 
-运行方法:
+Usage:
     python3 tests/test_parser.py
 """
 
 import sys
 from pathlib import Path
 
-# 添加 src 目录到路径
+# Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from antlr4 import *
@@ -17,23 +17,23 @@ from sql_rewriter._generated import HiveLexer, HiveParser
 
 
 def test_parse(sql_text):
-    """测试解析SQL语句"""
+    """Test parsing SQL statement"""
     try:
         input_stream = InputStream(sql_text)
         lexer = HiveLexer(input_stream)
         token_stream = CommonTokenStream(lexer)
         parser = HiveParser(token_stream)
         tree = parser.statement()
-        print(f"✓ 解析成功: {sql_text}")
+        print(f"✓ Parse successful: {sql_text}")
         return True
     except Exception as e:
-        print(f"✗ 解析失败: {sql_text}")
-        print(f"  错误: {e}")
+        print(f"✗ Parse failed: {sql_text}")
+        print(f"  Error: {e}")
         return False
 
 
 def main():
-    """运行测试"""
+    """Run tests"""
     test_cases = [
         "SELECT * FROM users;",
         "SELECT id, name FROM users WHERE age > 18;",
@@ -42,7 +42,7 @@ def main():
         "SELECT COUNT(*) FROM orders GROUP BY status;",
     ]
     
-    print("运行测试用例...")
+    print("Running test cases...")
     print("=" * 60)
     
     passed = 0
@@ -56,7 +56,7 @@ def main():
         print()
     
     print("=" * 60)
-    print(f"测试结果: {passed} 通过, {failed} 失败")
+    print(f"Test results: {passed} passed, {failed} failed")
 
 
 if __name__ == "__main__":
