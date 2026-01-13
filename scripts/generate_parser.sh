@@ -2,8 +2,13 @@
 # 生成 ANTLR4 解析器代码
 # 将生成的代码输出到 src/sql_rewriter/_generated/ 目录
 
-# 检查是否安装了 antlr4
-if ! command -v antlr &> /dev/null; then
+# 检查是否安装了 antlr4，支持 antlr 和 antlr4 两种命令名
+ANTLR_CMD=""
+if command -v antlr &> /dev/null; then
+    ANTLR_CMD="antlr"
+elif command -v antlr4 &> /dev/null; then
+    ANTLR_CMD="antlr4"
+else
     echo "错误: 未找到 antlr4 命令"
     echo "请先安装 ANTLR4:"
     echo "  macOS: brew install antlr"
@@ -34,7 +39,7 @@ echo "输出目录: $OUTPUT_DIR"
 
 cd "$GRAMMAR_DIR" || exit 1
 
-antlr -Dlanguage=Python3 -visitor -o "$OUTPUT_DIR" HiveLexer.g4 HiveParser.g4
+$ANTLR_CMD -Dlanguage=Python3 -visitor -o "$OUTPUT_DIR" HiveLexer.g4 HiveParser.g4
 
 if [ $? -eq 0 ]; then
     echo "✓ 解析器代码生成成功！"
