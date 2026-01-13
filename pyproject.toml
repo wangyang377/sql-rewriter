@@ -1,0 +1,98 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# 注意：构建时会自动运行 setup.py 中的 BuildPyCommand
+# 这会生成 ANTLR 代码并包含在分发包中
+
+[project]
+name = "sql-rewriter"
+version = "0.1.0"
+description = "基于 ANTLR4 的通用 SQL 重写工具，特别适用于 LLM 生成的 SQL 权限管理"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "wangyang", email = "wangyang377@ustc.edu"}
+]
+maintainers = [
+    {name = "wangyang", email = "wangyang377@ustc.edu"}
+]
+keywords = ["sql", "rewriter", "llm", "antlr4", "sql-parser", "sql-rewrite", "hive"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Database",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "antlr4-python3-runtime>=4.13.1,<5.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/sql-rewriter"
+Documentation = "https://github.com/yourusername/sql-rewriter#readme"
+Repository = "https://github.com/yourusername/sql-rewriter"
+Issues = "https://github.com/yourusername/sql-rewriter/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md"]
+
+# 代码格式化配置（Black）
+[tool.black]
+line-length = 100
+target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+
+# 代码检查配置（Ruff）
+[tool.ruff]
+line-length = 100
+target-version = "py37"
+select = ["E", "F", "I", "N", "W"]
+ignore = []
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]  # 允许未使用的导入
+
+# 类型检查配置（mypy）
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+# Pytest 配置
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--cov=src/sql_rewriter",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]

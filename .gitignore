@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# ANTLR
+*.tokens
+*.interp
+
+# ANTLR 生成的代码（不提交到 Git，构建时会自动生成）
+src/sql_rewriter/_generated/*.py
+!src/sql_rewriter/_generated/__init__.py
+# 注意：__init__.py 需要提交，因为它包含导出逻辑
+
+# Project specific
+example_usage.py
