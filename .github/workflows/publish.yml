@@ -3,7 +3,12 @@ name: Publish to PyPI
 on:
   release:
     types: [published]
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:  # Allow manual trigger
+    inputs:
+      tag:
+        description: 'Git tag to publish (e.g., v0.1.2). Leave empty to use latest tag.'
+        required: false
+        type: string
 
 jobs:
   publish:
@@ -11,6 +16,42 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for tags
+    
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        if [ "${{ github.event_name }}" == "release" ]; then
+          # From release event: tag name is like v0.1.2
+          VERSION=${GITHUB_REF#refs/tags/v}
+        elif [ -n "${{ github.event.inputs.tag }}" ]; then
+          # From manual trigger with specified tag
+          VERSION=$(echo "${{ github.event.inputs.tag }}" | sed 's/^v//')
+        else
+          # From manual trigger: use latest tag
+          VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "")
+          if [ -z "$VERSION" ]; then
+            echo "Error: No git tag found. Please create a release with a tag first, or specify a tag in the workflow input."
+            exit 1
+          fi
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "📦 Extracted version: $VERSION"
+    
+    - name: Update version in pyproject.toml
+      run: |
+        VERSION="${{ steps.get_version.outputs.version }}"
+        sed -i.bak "s/^version = .*/version = \"$VERSION\"/" pyproject.toml
+        echo "✓ Updated version in pyproject.toml to $VERSION"
+        cat pyproject.toml | grep "^version ="
+    
+    - name: Update version in __init__.py
+      run: |
+        VERSION="${{ steps.get_version.outputs.version }}"
+        sed -i.bak "s/^__version__ = .*/__version__ = \"$VERSION\"/" src/sql_rewriter/__init__.py
+        echo "✓ Updated version in __init__.py to $VERSION"
+        cat src/sql_rewriter/__init__.py | grep "^__version__"
     
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -44,6 +85,21 @@ jobs:
     - name: Check package
       run: |
         twine check dist/*
+    
+    - name: Check if version already exists on PyPI
+      id: check_pypi
+      run: |
+        VERSION="${{ steps.get_version.outputs.version }}"
+        if curl -s "https://pypi.org/pypi/sql-rewriter/$VERSION/json" 2>/dev/null | grep -q "\"$VERSION\""; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+          echo "⚠️  Version $VERSION already exists on PyPI"
+          echo "   PyPI does not allow overwriting existing versions."
+          echo "   Please update the version number and create a new release."
+          exit 1
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+          echo "✓ Version $VERSION is new, proceeding with upload"
+        fi
     
     - name: Publish to PyPI
       env:

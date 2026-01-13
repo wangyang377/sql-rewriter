@@ -7,6 +7,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sql-rewriter"
+# Version will be automatically updated from Git tag during release
+# This is the development version
 version = "0.1.2"
 description = "ANTLR4-based SQL rewriting tool for permission management in LLM-generated SQL"
 readme = "README.md"
