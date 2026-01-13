@@ -13,7 +13,7 @@ else
     echo "请先安装 ANTLR4:"
     echo "  macOS: brew install antlr"
     echo "  Linux: sudo apt-get install antlr4"
-    echo "  或下载: https://www.antlr.org/download/antlr-4.13.1-complete.jar"
+    echo "  或下载: https://www.antlr.org/download/antlr-4.13.2-complete.jar"
     exit 1
 fi
 

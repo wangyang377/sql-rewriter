@@ -17,10 +17,15 @@ jobs:
       with:
         python-version: '3.9'
     
-    - name: Install ANTLR4
+    - name: Install Java and ANTLR4
       run: |
         sudo apt-get update
-        sudo apt-get install -y antlr4
+        sudo apt-get install -y default-jre
+        wget -q https://www.antlr.org/download/antlr-4.13.2-complete.jar -O /tmp/antlr.jar
+        echo '#!/bin/bash' > /tmp/antlr
+        echo 'java -jar /tmp/antlr.jar "$@"' >> /tmp/antlr
+        chmod +x /tmp/antlr
+        sudo mv /tmp/antlr /usr/local/bin/antlr
     
     - name: Install build dependencies
       run: |
