@@ -90,6 +90,8 @@ def add_where_condition(sql_text, new_condition, table_name=None):
     """
     sql_clean = sql_text.rstrip().rstrip(';').strip()
     new_condition = new_condition.strip()
+    if new_condition is None or new_condition == '':
+        return sql_clean
     
     # Create input stream
     input_stream = InputStream(sql_clean)
