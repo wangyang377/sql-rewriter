@@ -54,4 +54,4 @@ src/sql_rewriter/_generated/*.py
 # 注意：__init__.py 需要提交，因为它包含导出逻辑
 
 # Project specific
-example_usage.py
+PUBLISH.md

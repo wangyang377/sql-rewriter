@@ -50,7 +50,7 @@ LIMIT 100;'''
     
     # 示例3：JOIN 查询
     print('示例3: JOIN 查询，只针对特定表添加条件')
-    sql = 'SELECT * FROM users JOIN orders ON users.id = orders.user_id;'
+    sql = 'SELECT * FROM users u JOIN orders o ON u.id = o.user_id;'
     new_sql = add_where_condition(sql, 'users.status = \'active\'', 'users')
     print(f'原始SQL: {sql}')
     print(f'修改后: {new_sql}')

@@ -47,10 +47,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/sql-rewriter"
-Documentation = "https://github.com/yourusername/sql-rewriter#readme"
-Repository = "https://github.com/yourusername/sql-rewriter"
-Issues = "https://github.com/yourusername/sql-rewriter/issues"
+Homepage = "https://github.com/wangyang377/sql-rewriter"
+Documentation = "https://github.com/wangyang377/sql-rewriter#readme"
+Repository = "https://github.com/wangyang377/sql-rewriter"
+Issues = "https://github.com/wangyang377/sql-rewriter/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

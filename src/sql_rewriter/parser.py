@@ -33,8 +33,8 @@ class WhereClauseVisitor(HiveParserVisitor):
             if join_source:
                 atom_join_source = join_source.atomjoinSource()
                 if atom_join_source:
-                    table_source = atom_join_source.tableSource()
-                    self.current_table_name = table_source.getText().lower()
+                    table_name = atom_join_source.tableSource().tableName()
+                    self.current_table_name = table_name.getText().lower()
         
         # 检查是否匹配目标表名
         should_process = self.current_table_name == self.target_table_name
