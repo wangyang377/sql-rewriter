@@ -21,21 +21,21 @@ def main():
     print()
     
     # 示例1：基础使用
-    print('示例1: 为没有 WHERE 子句的 SQL 添加条件')
+    print('示例1: 为已有 WHERE 子句的复杂 SQL 添加条件')
     sql = '''SELECT 
-    date_time, 
-    ROUND(SUM(gmv_sum), 2) AS total_gmv
+    order_date, 
+    ROUND(SUM(amount), 2) AS total_amount
 FROM 
-    jdi_ge.jdi_ge_income_gmv_new_shard
+    sales.orders
 WHERE 
-    is_reject = '0' 
-    AND date_time >= formatDateTime(now() - INTERVAL 7 DAY, '%Y-%m-%d')
+    status = 'active' 
+    AND order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
 GROUP BY 
-    date_time
+    order_date
 ORDER BY 
-    date_time DESC
+    order_date DESC
 LIMIT 100;'''
-    new_sql = add_where_condition(sql, "(trade_type in ('SMB','纯C','C中B')) or (dual_calculate in ('1_1') and trade_type = 'KA')", 'jdi_ge.jdi_ge_income_gmv_new_shard')
+    new_sql = add_where_condition(sql, "(category in ('A','B','C')) or (priority = 'high' and category = 'D')", 'sales.orders')
     print(f'原始SQL: {sql}')
     print(f'修改后: {new_sql}')
     print()
