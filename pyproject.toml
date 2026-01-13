@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "sql-rewriter"
 version = "0.1.1"
-description = "基于 ANTLR4 的通用 SQL 重写工具，特别适用于 LLM 生成的 SQL 权限管理"
+description = "ANTLR4-based SQL rewriting tool for permission management in LLM-generated SQL"
 readme = "README.md"
 requires-python = ">=3.7"
 license = {text = "MIT"}

@@ -1,7 +1,8 @@
 """
-SQL Rewriter - 基于 ANTLR4 的通用 SQL 重写工具
+SQL Rewriter - ANTLR4-based SQL Rewriting Tool
 
-主要功能：在 SQL 语句中添加 WHERE 条件，特别适用于 LLM 生成的 SQL 权限管理
+Main functionality: Add WHERE conditions to SQL statements, especially suitable for 
+permission management in LLM-generated SQL.
 """
 
 from .parser import add_where_condition
